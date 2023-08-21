@@ -10,8 +10,8 @@ let sortSelect = document.getElementById("select-sort");
 
 // data
 let allTasks = [];   //contains all tasks
-const selectedTasks = [];  //contains selected tasks only
-const unselected = [];
+let selectedTasks = [];  //contains selected tasks only
+let unselected = [];
 
 //New Task List Item
 let createNewTaskElement = function (taskString) {
@@ -54,7 +54,7 @@ let addTask = function () {
     //Create a new list item
     let listItem = createNewTaskElement(taskInput.value);
     allTasks.push(listItem)
-    console.log(allTasks);
+    // console.log(allTasks);
 
 
     showTaskList(allTasks);
@@ -68,16 +68,17 @@ let addTask = function () {
 // show all tasks
 function showTaskList() {
     for (const listItem of allTasks) {
-        // append to ul element
         incompleteTasks.appendChild(listItem);
     }
 }
 
 // show - task is seleted, completed
 function showSelectedTasks() {
-    for (const listItem of allTasks) {
-        incompleteTasks.removeChild(listItem);
-    }
+    // for (const listItem of allTasks) {
+    //     incompleteTasks.removeChild(listItem);
+    // }
+    incompleteTasks.innerHTML = ""
+
     for (const listItem of selectedTasks) {
         incompleteTasks.appendChild(listItem);
     }
@@ -85,21 +86,20 @@ function showSelectedTasks() {
 
 // show - task is not completed
 function showActivatedTasks() {
-    for (const listItem of selectedTasks) {
-        incompleteTasks.removeChild(listItem);
+    // for (const listItem of allTasks) {
+    //     incompleteTasks.removeChild(listItem);
+    // }
+    incompleteTasks.innerHTML = ""
+    for (const listItem of unselected) {
+        incompleteTasks.appendChild(listItem);
     }
 }
 
-function show(arr) {
-
-
-}
 
 //Edit an existing task
 let editTask = function () {
     console.log("Edit task...");
     let listItem = this.parentNode;
-
 
     let editInput = listItem.querySelector("input[type=text");
     let label = listItem.querySelector("label");
@@ -122,6 +122,9 @@ let deleteTask = function () {
     let listItem = this.parentNode;
     let ul = listItem.parentNode;
 
+    const filteredArray = allTasks.filter(item => {
+
+    })
 
     console.log(listItem);
 
@@ -131,16 +134,22 @@ let deleteTask = function () {
 
 
 const handleCheckbox = function () {
-    let listItem = this.parentNode;
-    let checkBox = listItem.querySelector("input[type=checkbox]")
-    let checkBoxValue = checkBox.checked;
-    if (checkBox.checked == true) {
-        selectedTasks.push(listItem);
-        console.log(selectedTasks);
-    } else {
-        console.log(checkBoxValue);
-        console.log("unselected");
+    unselected = [];
+    selectedTasks = [];
+    for (const listItem of allTasks) {
+        let checkBox = listItem.querySelector("input[type=checkbox]").checked
+
+        if (checkBox === true) {
+            selectedTasks.push(listItem);
+            // console.log(selectedTasks);
+        } else {
+            unselected.push(listItem);
+            console.log(unselected.map(a => a.querySelector("label").innerText));
+        }
     }
+    // let listItem = this.parentNode;
+    // let checkBox = listItem.querySelector("input[type=checkbox]")
+    // let checkBoxValue = checkBox.checked;
 }
 
 let bindTaskEvents = function (taskListItem) {
@@ -182,8 +191,8 @@ taskInput.addEventListener('keydown', function (e) {
     }
 })
 btnAll.addEventListener("click", showTaskList)
-btnCompleted.addEventListener("click", showSelectedTasks)
 btnActive.addEventListener("click", showActivatedTasks)
+btnCompleted.addEventListener("click", showSelectedTasks)
 
 
 
