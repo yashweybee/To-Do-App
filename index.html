@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-Do App</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="container">
+        <h2>TODO App</h2>
+        <!-- <h3>Add Item</h3> -->
+        <p>
+            <input id="new-task" type="text"><button>Add</button>
+        </p>
+
+        <!-- <h3>Todo</h3> -->
+        <ul id="incomplete-tasks">
+            <!-- <li>
+                <input type="checkbox">
+                <label>a</label>
+                <input type="text">
+                <button class="edit">Edit</button>
+                <button class="delete">Delete</button>
+            </li>
+            <li>
+                <input type="checkbox">
+                <label>b</label>
+                <input type="text" value="">
+                <button class="edit">Edit</button>
+                <button class="delete">Delete</button>
+            </li> -->
+        </ul>
+
+        <!-- <h3>Completed</h3>
+        <ul id="completed-tasks">
+            <li><input type="checkbox" checked><label>c</label><input type="text"><button
+                    class="edit">Edit</button><button class="delete">Delete</button></li>
+        </ul> -->
+    </div>
+
+    <div class="functions">
+        <select name="actions" id="select-actions">
+            <option value="action">Action</option>
+            <option value="delete all selected">delete all selected</option>
+            <option value="Select All">Select All</option>
+            <option value="Un Select All">Un Select All</option>
+        </select>
+        <select name="sort" id="select-sort" onchange="sortTasks()">
+            <option value="action">Sort</option>
+            <option value="A-Z">A-Z</option>
+            <option value="Z-A">Z-A</option>
+            <option value="Newest">Newest</option>
+            <option value="Oldest">Oldest</option>
+        </select>
+
+        <div class="btns">
+            <button id="btn-all">All</button>
+            <button id="btn-active">Active</button>
+            <button id="btn-completed">Completed</button>
+        </div>
+    </div>
+    <script src="index.js"></script>
+</body>
+
+</html>
