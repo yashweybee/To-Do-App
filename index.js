@@ -12,10 +12,12 @@ let sortSelect = document.getElementById("select-sort");
 let allTasks = [];   //contains all tasks
 let selectedTasks = [];  //contains selected tasks only
 let unselected = [];
+let count = 0;
 
 //New Task List Item
 let createNewTaskElement = function (taskString) {
     if (taskString) {
+
         //Create List Item
         let listItem = document.createElement("li");
         let checkBox = document.createElement("input");
@@ -26,6 +28,8 @@ let createNewTaskElement = function (taskString) {
 
 
         //Each element needs modifying
+
+        listItem.id = count
 
         checkBox.type = "checkbox";
         editInput.type = "text";
@@ -51,8 +55,9 @@ let createNewTaskElement = function (taskString) {
 
 //Add a new task
 let addTask = function () {
+    count++
     //Create a new list item
-    let listItem = createNewTaskElement(taskInput.value);
+    let listItem = createNewTaskElement(taskInput.value.trim());
     allTasks.push(listItem)
     // console.log(allTasks);
 
@@ -117,16 +122,17 @@ let editTask = function () {
 }
 
 //Delete an existing task
-let deleteTask = function () {
+let deleteTask = function (e) {
     console.log("Delete task...");
     let listItem = this.parentNode;
     let ul = listItem.parentNode;
 
-    const filteredArray = allTasks.filter(item => {
+    // console.log(e.target.parentNode);
 
-    })
+    const filteredArray = allTasks.filter(item => e.target.parentNode !== item.id)
+    console.log(filteredArray);
 
-    console.log(listItem);
+    // console.log(listItem);
 
     //Remove the parent list item from the ul
     ul.removeChild(listItem);
