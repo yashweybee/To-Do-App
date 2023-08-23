@@ -71,24 +71,16 @@ button {
     font-size: 15px;
     width: 60px;
     margin: 10px 0 0;
-    font-family: Lato, sans-serif;
+    /* font-family: Lato, sans-serif; */
     cursor: pointer;
     border-radius: 5px;
     padding: 4px;
 }
 
-.btn-add {
-    margin: 0;
-}
-
-.edit {
-    background-color: rgb(39, 137, 218);
-    color: white;
-}
-
+.edit,
 .delete {
-    background-color: rgb(221, 91, 91);
-    color: white;
+    width: 25px;
+    cursor: pointer;
 }
 
 button:hover {
@@ -118,7 +110,7 @@ input[type="text"] {
     border: 1px solid #ddd;
     background: #fff;
     border-radius: 6px;
-    font-family: Lato, sans-serif;
+    /* font-family: Lato, sans-serif; */
     color: #888;
 }
 
@@ -149,7 +141,7 @@ p>button:hover {
 li {
     display: flex;
     justify-content: space-around;
-    align-items: flex-start;
+    /* align-items: flex-start; */
     overflow: hidden;
     border-bottom: 1px solid #eee;
 }
@@ -157,7 +149,7 @@ li {
 li>input[type="checkbox"] {
     margin: 0 10px;
     position: relative;
-    top: 15px;
+    /* top: 15px; */
 }
 
 li>label {
