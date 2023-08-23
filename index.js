@@ -49,7 +49,7 @@ let createNewTaskElement = function (taskString) {
         listItem.appendChild(deleteButton);
         return listItem;
     } else if (taskString === "") {
-        alert("Please add Task Name!!!")
+        alert("Please add Task Name!!!");
     }
 }
 
@@ -59,7 +59,7 @@ let addTask = function () {
     //Create a new list item
     let listItem = createNewTaskElement(taskInput.value.trim());
     allTasks.push(listItem)
-    // console.log(allTasks);
+    console.log(allTasks);
 
 
     showTaskList(allTasks);
@@ -72,6 +72,8 @@ let addTask = function () {
 
 // show all tasks
 function showTaskList() {
+    // console.log(allTasks);
+    incompleteTasks.innerHTML = "";
     for (const listItem of allTasks) {
         incompleteTasks.appendChild(listItem);
     }
@@ -83,7 +85,6 @@ function showSelectedTasks() {
     //     incompleteTasks.removeChild(listItem);
     // }
     incompleteTasks.innerHTML = ""
-
     for (const listItem of selectedTasks) {
         incompleteTasks.appendChild(listItem);
     }
@@ -125,23 +126,37 @@ let editTask = function () {
 let deleteTask = function (e) {
     console.log("Delete task...");
     let listItem = this.parentNode;
-    let ul = listItem.parentNode;
+    // let ul = listItem.parentNode;
 
-    // console.log(e.target.parentNode);
+    console.log(listItem);
+    updateAllTaskListArrays(listItem);
 
-    const filteredArray = allTasks.filter(item => e.target.parentNode !== item.id)
-    console.log(filteredArray);
+    showTaskList()
+}
 
-    // console.log(listItem);
+// updates all arrays that having task information  accourding to new filtered array 
+function updateAllTaskListArrays(listItem) {
+    let filteredArray = allTasks.filter(item => {
+        console.log(listItem.id, item.id);
+        return listItem.id !== item.id
+    })
+    allTasks = [...filteredArray];
 
-    //Remove the parent list item from the ul
-    ul.removeChild(listItem);
+    let filteredArray2 = selectedTasks.filter(item => {
+        return listItem.id !== item.id
+    })
+    selectedTasks = [...filteredArray2];
+
+    let filteredArray3 = unselected.filter(item => {
+        return listItem.id !== item.id
+    })
+    unselected = [...filteredArray3];
 }
 
 
 const handleCheckbox = function () {
-    unselected = [];
     selectedTasks = [];
+    unselected = [];
     for (const listItem of allTasks) {
         let checkBox = listItem.querySelector("input[type=checkbox]").checked
 
