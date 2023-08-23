@@ -104,18 +104,25 @@ function showActivatedTasks() {
 
 
 //Edit an existing task
-let editTask = function () {
+var editTask = function () {
     console.log("Edit task...");
-    let listItem = this.parentNode;
 
-    let editInput = listItem.querySelector("input[type=text");
-    let label = listItem.querySelector("label");
+    var listItem = this.parentNode;
 
-    let containsClass = listItem.classList.contains("editMode");
+    var editInput = listItem.querySelector("input[type=text");
+    var label = listItem.querySelector("label");
 
+    var containsClass = listItem.classList.contains("editMode");
+
+    //if the class of the parent is .editMode
     if (containsClass) {
+        //Switch from .editMode
+        //label text become the input's value
         label.innerText = editInput.value;
+        editInput.value = ""
     } else {
+        //Switch to .editMode
+        //input value becomes the label's text
         editInput.value = label.innerText;
     }
 
