@@ -1,6 +1,7 @@
 let taskInput = document.getElementById("new-task"); //new-task
 // let btnAdd = document.getElementsByTagName("button")[0]; //first button
 let btnAdd = document.querySelector(".add-task");
+let btnSearch = document.querySelector(".search-btn");
 let incompleteTasks = document.getElementById("incomplete-tasks"); //incomplete-tasks
 let btnAll = document.getElementById("btn-all")
 let btnActive = document.getElementById("btn-active");
@@ -25,9 +26,8 @@ let createNewTaskElement = function (taskString) {
         let checkBox = document.createElement("input");
         let label = document.createElement("label");
         let editInput = document.createElement("input");
-        let editButton = document.createElement("button");
-        let deleteButton = document.createElement("button");
-
+        let editButton = document.createElement("img");
+        let deleteButton = document.createElement("img");
 
         //Each element needs modifying
 
@@ -36,9 +36,12 @@ let createNewTaskElement = function (taskString) {
         checkBox.type = "checkbox";
         editInput.type = "text";
 
-        editButton.innerText = "Edit";
+        editButton.src = "./assets/edit-icon.svg";
+        editButton.alt = "edit-icon.svg"
         editButton.className = "edit";
-        deleteButton.innerText = "Delete";
+
+        deleteButton.src = "./assets/delete-icon.svg";
+        deleteButton.alt = "delete-icon.svg"
         deleteButton.className = "delete";
 
         label.innerText = taskString;
@@ -73,12 +76,15 @@ let addTask = function () {
 }
 
 // show all tasks
-function showTaskList() {
-    // console.log(allTasks);
+function showTaskList(e, list1 = allTasks) {
+    console.log(list1);
     incompleteTasks.innerHTML = "";
-    for (const listItem of allTasks) {
-        incompleteTasks.appendChild(listItem);
-    }
+    list1.forEach(item => {
+        incompleteTasks.appendChild(item);
+    })
+    // for (const listItem of taskList) {
+    //     incompleteTasks.appendChild(listItem);
+    // }
 }
 
 // show - task is seleted, completed
@@ -178,33 +184,45 @@ const handleCheckbox = function () {
 let bindTaskEvents = function (taskListItem) {
     // select taskListItem's childrens
     let checkBox = taskListItem.querySelector("input[type=checkbox]");
-    let editButton = taskListItem.querySelector("button.edit");
-    let deleteButton = taskListItem.querySelector("button.delete");
+    let editButton = taskListItem.querySelector(".edit");
+    let deleteButton = taskListItem.querySelector(".delete");
 
     // bind editTask to edit button
-    editButton.onclick = editTask;
+    editButton.addEventListener('click', editTask);
 
     //bind deleteTask to delete button
-    deleteButton.onclick = deleteTask;
+    deleteButton.addEventListener('click', deleteTask);
 
     //bind checkBoxEventHandler to checkbox
     checkBox.onchange = handleCheckbox;
 }
 
 function sortTasks() {
+    const selectedValue = sortSelect.value
+    console.log(selectedValue);
     const copyAllTasks = [...allTasks];
-    // console.log(copyAllTasks.map(item => ));
 
-    for (const listItem of allTasks) {
-        incompleteTasks.removeChild(listItem);
+
+    // copyAllTasks.map(item => {
+    //     console.log(item.querySelector("label").innerText)
+    // })
+
+
+    if (selectedValue === "A-Z") {
+        copyAllTasks.sort((a, b) => {
+            return a.querySelector("label").innerText.localeCompare(b.querySelector("label").innerText)
+        })
+        showTaskList(copyAllTasks);
+    } else if (selectedValue === "Z-A") {
+        copyAllTasks.sort((a, b) => {
+            return a.querySelector("label").innerText.localeCompare(b.querySelector("label").innerText)
+        })
+        showTaskList(copyAllTasks.reverse());
+    } else if (selectedValue === "Newest") {
+        showTaskList(copyAllTasks.reverse());
+    } else if (selectedValue === "Oldest") {
+        showTaskList();
     }
-    if (sortSelect.value === "A-Z") {
-        copyAllTasks.sort()
-        for (const listItem of copyAllTasks) {
-            incompleteTasks.appendChild(listItem);
-        }
-    }
-    console.log(sortSelect.value);
 }
 
 function taskAction() {
@@ -242,6 +260,11 @@ taskInput.addEventListener('keydown', function (e) {
         addTask()
     }
 })
+
+btnSearch.addEventListener('click', () => {
+    // console.log("hgrfkh");
+})
+
 btnAll.addEventListener("click", showTaskList)
 btnActive.addEventListener("click", showActivatedTasks)
 btnCompleted.addEventListener("click", showSelectedTasks)
