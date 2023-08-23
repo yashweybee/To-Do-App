@@ -42,12 +42,13 @@
     </div>
 
     <div class="functions">
-        <select name="actions" id="select-actions">
+        <select name="actions" id="select-actions" onchange="taskAction()">
             <option value="action">Action</option>
-            <option value="delete all selected">delete all selected</option>
+            <option value="delete selected">delete selected</option>
             <option value="Select All">Select All</option>
-            <option value="Un Select All">Un Select All</option>
+            <option value="Unselect All">Unselect All</option>
         </select>
+
         <select name="sort" id="select-sort" onchange="sortTasks()">
             <option value="action">Sort</option>
             <option value="A-Z">A-Z</option>

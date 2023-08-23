@@ -7,6 +7,7 @@ let btnCompleted = document.getElementById("btn-completed");
 // let completedTasksHolder = document.getElementById("completed-tasks"); //completed-tasks
 
 let sortSelect = document.getElementById("select-sort");
+let selectActions = document.getElementById("select-actions")
 
 // data
 let allTasks = [];   //contains all tasks
@@ -59,7 +60,7 @@ let addTask = function () {
     //Create a new list item
     let listItem = createNewTaskElement(taskInput.value.trim());
     allTasks.push(listItem)
-    console.log(allTasks);
+    // console.log(allTasks);
 
 
     showTaskList(allTasks);
@@ -123,7 +124,7 @@ let editTask = function () {
 }
 
 //Delete an existing task
-let deleteTask = function (e) {
+let deleteTask = function () {
     console.log("Delete task...");
     let listItem = this.parentNode;
     // let ul = listItem.parentNode;
@@ -136,20 +137,13 @@ let deleteTask = function (e) {
 
 // updates all arrays that having task information  accourding to new filtered array 
 function updateAllTaskListArrays(listItem) {
-    let filteredArray = allTasks.filter(item => {
-        console.log(listItem.id, item.id);
-        return listItem.id !== item.id
-    })
+    let filteredArray = allTasks.filter(item => listItem.id !== item.id)
     allTasks = [...filteredArray];
 
-    let filteredArray2 = selectedTasks.filter(item => {
-        return listItem.id !== item.id
-    })
+    let filteredArray2 = selectedTasks.filter(item => listItem.id !== item.id)
     selectedTasks = [...filteredArray2];
 
-    let filteredArray3 = unselected.filter(item => {
-        return listItem.id !== item.id
-    })
+    let filteredArray3 = unselected.filter(item => listItem.id !== item.id)
     unselected = [...filteredArray3];
 }
 
@@ -203,6 +197,35 @@ function sortTasks() {
         }
     }
     console.log(sortSelect.value);
+}
+
+function taskAction() {
+    console.log(selectActions.value);
+    if (selectActions.value === "Select All") {
+        for (const listItem of allTasks) {
+            listItem.querySelector("input[type=checkbox]").checked = true;
+        }
+        selectedTasks = [...allTasks]
+        unselected = []
+
+    } else if (selectActions.value === "Unselect All") {
+        for (const listItem of allTasks) {
+            listItem.querySelector("input[type=checkbox]").checked = false;
+        }
+        unselected = [...allTasks]
+        selectedTasks = [];
+    } else if (selectActions.value === "delete selected") {
+        if (selectedTasks.length > 0) {
+            let filtered = allTasks.filter(item => !selectedTasks.includes(item))
+            allTasks = [...filtered]
+
+            let filtered2 = selectedTasks.filter(item => !selectedTasks.includes(item))
+
+            selectedTasks = [...filtered2]
+            showTaskList();
+        }
+    }
+    selectActions.value = "action"
 }
 
 btnAdd.addEventListener("click", addTask)
