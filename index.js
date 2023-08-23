@@ -1,5 +1,6 @@
 let taskInput = document.getElementById("new-task"); //new-task
-let btnAdd = document.getElementsByTagName("button")[0]; //first button
+// let btnAdd = document.getElementsByTagName("button")[0]; //first button
+let btnAdd = document.querySelector(".add-task");
 let incompleteTasks = document.getElementById("incomplete-tasks"); //incomplete-tasks
 let btnAll = document.getElementById("btn-all")
 let btnActive = document.getElementById("btn-active");
