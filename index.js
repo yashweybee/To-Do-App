@@ -19,60 +19,58 @@ let count = 0;
 
 //New Task List Item
 let createNewTaskElement = function (taskString) {
-    if (taskString) {
+    //Create List Item
+    let listItem = document.createElement("li");
+    let checkBox = document.createElement("input");
+    let label = document.createElement("label");
+    let editInput = document.createElement("input");
+    let editButton = document.createElement("img");
+    let deleteButton = document.createElement("img");
 
-        //Create List Item
-        let listItem = document.createElement("li");
-        let checkBox = document.createElement("input");
-        let label = document.createElement("label");
-        let editInput = document.createElement("input");
-        let editButton = document.createElement("img");
-        let deleteButton = document.createElement("img");
+    //Each element needs modifying
 
-        //Each element needs modifying
+    listItem.id = count
 
-        listItem.id = count
+    checkBox.type = "checkbox";
+    editInput.type = "text";
 
-        checkBox.type = "checkbox";
-        editInput.type = "text";
+    editButton.src = "./assets/edit-icon.svg";
+    editButton.alt = "edit-icon.svg"
+    editButton.className = "edit";
 
-        editButton.src = "./assets/edit-icon.svg";
-        editButton.alt = "edit-icon.svg"
-        editButton.className = "edit";
+    deleteButton.src = "./assets/delete-icon.svg";
+    deleteButton.alt = "delete-icon.svg"
+    deleteButton.className = "delete";
 
-        deleteButton.src = "./assets/delete-icon.svg";
-        deleteButton.alt = "delete-icon.svg"
-        deleteButton.className = "delete";
+    label.innerText = taskString;
 
-        label.innerText = taskString;
-
-        //Each element needs appending
-        listItem.appendChild(checkBox);
-        listItem.appendChild(label);
-        listItem.appendChild(editInput);
-        listItem.appendChild(editButton);
-        listItem.appendChild(deleteButton);
-        return listItem;
-    } else if (taskString === "") {
-        alert("Please add Task Name!!!");
-    }
+    //Each element needs appending
+    listItem.appendChild(checkBox);
+    listItem.appendChild(label);
+    listItem.appendChild(editInput);
+    listItem.appendChild(editButton);
+    listItem.appendChild(deleteButton);
+    return listItem;
 }
 
 //Add a new task
 let addTask = function () {
     count++
     //Create a new list item
-    let listItem = createNewTaskElement(taskInput.value.trim());
-    allTasks.push(listItem)
-    // console.log(allTasks);
+    const inputTask = taskInput.value.trim();
+    if (inputTask !== "") {
 
+        let listItem = createNewTaskElement(inputTask);
 
-    showTaskList(allTasks);
+        allTasks.push(listItem);
+        unselected = [...allTasks]; //add task is also uncompleted or unselected
 
-    // append to ul element
-    // incompleteTasks.appendChild(listItem);
-    bindTaskEvents(listItem);
-    taskInput.value = "";
+        bindTaskEvents(listItem);
+        showTaskList(allTasks);
+        taskInput.value = "";
+    } else {
+        alert("Enter valid task");
+    }
 }
 
 // show all tasks
@@ -82,9 +80,6 @@ function showTaskList(e, list1 = allTasks) {
     list1.forEach(item => {
         incompleteTasks.appendChild(item);
     })
-    // for (const listItem of taskList) {
-    //     incompleteTasks.appendChild(listItem);
-    // }
 }
 
 // show - task is seleted, completed
@@ -113,9 +108,7 @@ function showActivatedTasks() {
 //Edit an existing task
 var editTask = function () {
     console.log("Edit task...");
-
     var listItem = this.parentNode;
-
     var editInput = listItem.querySelector("input[type=text");
     var label = listItem.querySelector("label");
 
@@ -146,7 +139,7 @@ let deleteTask = function () {
     console.log(listItem);
     updateAllTaskListArrays(listItem);
 
-    showTaskList()
+    showTaskList(undefined)
 }
 
 // updates all arrays that having task information  accourding to new filtered array 
@@ -212,16 +205,16 @@ function sortTasks() {
         copyAllTasks.sort((a, b) => {
             return a.querySelector("label").innerText.localeCompare(b.querySelector("label").innerText)
         })
-        showTaskList(copyAllTasks);
+        showTaskList(undefined, copyAllTasks);
     } else if (selectedValue === "Z-A") {
         copyAllTasks.sort((a, b) => {
             return a.querySelector("label").innerText.localeCompare(b.querySelector("label").innerText)
         })
-        showTaskList(copyAllTasks.reverse());
+        showTaskList(undefined, copyAllTasks.reverse());
     } else if (selectedValue === "Newest") {
-        showTaskList(copyAllTasks.reverse());
+        showTaskList(undefined, copyAllTasks.reverse());
     } else if (selectedValue === "Oldest") {
-        showTaskList();
+        showTaskList(undefined);
     }
 }
 
@@ -248,48 +241,31 @@ function taskAction() {
             let filtered2 = selectedTasks.filter(item => !selectedTasks.includes(item))
 
             selectedTasks = [...filtered2]
-            showTaskList();
+            showTaskList(undefined);
         }
     }
     selectActions.value = "action"
 }
 
-btnAdd.addEventListener("click", addTask)
-taskInput.addEventListener('keydown', function (e) {
+function handeleEnterKey(e) {
     if (e.key === "Enter") {
         addTask()
     }
-})
+}
 
 btnSearch.addEventListener('click', () => {
-    // console.log("hgrfkh");
+    console.log("search");
+
+    btnAdd.removeEventListener("click", addTask)
+    taskInput.removeEventListener('keydown', handeleEnterKey)
 })
+
+btnAdd.addEventListener("click", () => {
+    addTask()
+})
+taskInput.addEventListener('keydown', handeleEnterKey)
+
 
 btnAll.addEventListener("click", showTaskList)
 btnActive.addEventListener("click", showActivatedTasks)
 btnCompleted.addEventListener("click", showSelectedTasks)
-
-
-
-
-//Mark a task as complete
-// let taskCompleted = function () {
-//     console.log("Task complete...");
-//     //Append the task list item to the #completed-tasks
-//     let listItem = this.parentNode;
-//     completedTask.push(listItem);
-//     console.log(listItem.querySelector('label').innerText);
-//     console.log(completedTask);
-
-//     // completedTasksHolder.appendChild(listItem);
-//     bindTaskEvents(listItem, taskIncomplete);
-// }
-
-//Mark a task as incomplete
-// let taskIncomplete = function () {
-//     console.log("Task incomplete...");
-//     //Append the task list item to the #incomplete-tasks
-//     let listItem = this.parentNode;
-//     incompleteTasks.appendChild(listItem);
-//     bindTaskEvents(listItem, taskCompleted);
-// }
