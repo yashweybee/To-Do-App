@@ -82,29 +82,46 @@ function showTaskList(e, list1 = allTasks) {
 }
 
 //Edit an existing task
-var editTask = function () {
+var editTask = function (e) {
     console.log("Edit task...");
     var listItem = this.parentNode;
-    var editInput = listItem.querySelector("input[type=text");
+    var editInput = listItem.querySelector("input[type=text]");
     var label = listItem.querySelector("label");
 
     var containsClass = listItem.classList.contains("editMode");
 
-    //if the class of the parent is .editMode
+
+
+    console.log(containsClass);
     if (containsClass) {
         //Switch from .editMode
         //label text become the input's value
         label.innerText = editInput.value;
         editInput.value = ""
+        listItem.classList.remove("editMode")
     } else {
         //Switch to .editMode
         //input value becomes the label's text
-        editInput.value = label.innerText;
-    }
 
-    //Toggle .editMode on the list item
-    listItem.classList.toggle("editMode");
+        editInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                if (editInput.value === "") {
+                    alert("Please Enter Task Name")
+                } else {
+                    label.innerText = editInput.value;
+                    listItem.classList.remove("editMode")
+                }
+            } else if (e.key === 'Escape') {
+                editInput.value = label.innerText;
+                listItem.classList.remove("editMode")
+            }
+        })
+        editInput.value = label.innerText;
+        listItem.classList.add("editMode")
+        editInput.focus()
+    }
 }
+
 
 //Delete an existing task
 let deleteTask = function () {
