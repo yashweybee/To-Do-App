@@ -84,7 +84,7 @@ button {
 }
 
 button:hover {
-    background-color: #ddd;
+    background-color: #b9b9b9;
     color: #333;
 }
 
@@ -216,7 +216,12 @@ ul li.editMode label {
     display: none;
 }
 
-.clicked {
-    width: 20px;
-    background-color: #0FC57C;
+.btn-clicked {
+    background-color: #a3a3a3;
+    /* color: white; */
+}
+
+.message {
+    text-align: center;
+    color: red;
 }

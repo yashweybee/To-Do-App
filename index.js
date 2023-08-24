@@ -7,7 +7,9 @@ let btnActive = document.getElementById("btn-active");
 let btnCompleted = document.getElementById("btn-completed");
 
 let sortSelect = document.getElementById("select-sort");
-let selectActions = document.getElementById("select-actions")
+let selectActions = document.getElementById("select-actions");
+
+let messageDiv = document.querySelector(".message");
 
 // data
 let allTasks = [];   //contains all tasks
@@ -239,7 +241,16 @@ function searchItems(e) {
         copyAllTasks = allTasks.filter(item => {
             return item.querySelector('label').innerText.includes(searchInput);
         })
-        showTaskList(undefined, copyAllTasks);
+
+        if (copyAllTasks.length === 0) {
+            messageDiv.classList.remove("hide");
+            incompleteTasks.innerHTML = ""
+            // showTaskList(undefined)
+        } else {
+            messageDiv.classList.add("hide")
+            showTaskList(undefined, copyAllTasks);
+        }
+
         taskInput.value = ""
     }
 }
@@ -247,14 +258,19 @@ function searchItems(e) {
 function handeleEnterKey(e) {
     if (e.key === "Enter") {
         addTask()
+        btnAll.classList.add("btn-clicked")
+        btnActive.classList.remove("btn-clicked")
+        btnCompleted.classList.remove("btn-clicked")
     }
 }
 
 function handelAdd() {
+    messageDiv.classList.add("hide")
     taskInput.classList.remove("hide")
     btnSearch.style.width = "20px"
     btnAdd.style.width = "25px"
 
+    showTaskList(undefined)
     taskInput.removeEventListener('keydown', searchItems);
     taskInput.focus()
     taskInput.addEventListener('keydown', handeleEnterKey)
@@ -265,12 +281,24 @@ btnAdd.addEventListener("click", handelAdd)
 btnSearch.addEventListener('click', handleSearch)
 
 
-btnAll.addEventListener("click", showTaskList)
+btnAll.addEventListener("click", () => {
+    btnAll.classList.add("btn-clicked")
+    btnActive.classList.remove("btn-clicked")
+    btnCompleted.classList.remove("btn-clicked")
+    showTaskList(undefined)
+})
 
 btnActive.addEventListener("click", () => {
+    btnActive.classList.add("btn-clicked")
+    btnAll.classList.remove("btn-clicked")
+    btnCompleted.classList.remove("btn-clicked")
     showTaskList(undefined, unselectedTasks)
 })
 
 btnCompleted.addEventListener("click", () => {
+    btnCompleted.classList.add("btn-clicked")
+    btnActive.classList.remove("btn-clicked")
+    btnAll.classList.remove("btn-clicked")
+
     showTaskList(undefined, selectedTasks)
 })
