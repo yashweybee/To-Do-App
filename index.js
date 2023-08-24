@@ -1,12 +1,10 @@
 let taskInput = document.getElementById("new-task"); //new-task
-// let btnAdd = document.getElementsByTagName("button")[0]; //first button
 let btnAdd = document.querySelector(".add-task");
 let btnSearch = document.querySelector(".search-btn");
 let incompleteTasks = document.getElementById("incomplete-tasks"); //incomplete-tasks
 let btnAll = document.getElementById("btn-all")
 let btnActive = document.getElementById("btn-active");
 let btnCompleted = document.getElementById("btn-completed");
-// let completedTasksHolder = document.getElementById("completed-tasks"); //completed-tasks
 
 let sortSelect = document.getElementById("select-sort");
 let selectActions = document.getElementById("select-actions")
@@ -14,7 +12,7 @@ let selectActions = document.getElementById("select-actions")
 // data
 let allTasks = [];   //contains all tasks
 let selectedTasks = [];  //contains selected tasks only
-let unselected = [];
+let unselectedTasks = [];
 let count = 0;
 
 //New Task List Item
@@ -28,7 +26,6 @@ let createNewTaskElement = function (taskString) {
     let deleteButton = document.createElement("img");
 
     //Each element needs modifying
-
     listItem.id = count
 
     checkBox.type = "checkbox";
@@ -63,7 +60,7 @@ let addTask = function () {
         let listItem = createNewTaskElement(inputTask);
 
         allTasks.push(listItem);
-        unselected = [...allTasks]; //add task is also uncompleted or unselected
+        unselectedTasks = [...allTasks]; //add task is also uncompleted or unselectedTasks
 
         bindTaskEvents(listItem);
         showTaskList(allTasks);
@@ -75,35 +72,12 @@ let addTask = function () {
 
 // show all tasks
 function showTaskList(e, list1 = allTasks) {
-    console.log(list1);
+    // console.log(list1);
     incompleteTasks.innerHTML = "";
     list1.forEach(item => {
         incompleteTasks.appendChild(item);
     })
 }
-
-// show - task is seleted, completed
-function showSelectedTasks() {
-    // for (const listItem of allTasks) {
-    //     incompleteTasks.removeChild(listItem);
-    // }
-    incompleteTasks.innerHTML = ""
-    for (const listItem of selectedTasks) {
-        incompleteTasks.appendChild(listItem);
-    }
-}
-
-// show - task is not completed
-function showActivatedTasks() {
-    // for (const listItem of allTasks) {
-    //     incompleteTasks.removeChild(listItem);
-    // }
-    incompleteTasks.innerHTML = ""
-    for (const listItem of unselected) {
-        incompleteTasks.appendChild(listItem);
-    }
-}
-
 
 //Edit an existing task
 var editTask = function () {
@@ -150,14 +124,14 @@ function updateAllTaskListArrays(listItem) {
     let filteredArray2 = selectedTasks.filter(item => listItem.id !== item.id)
     selectedTasks = [...filteredArray2];
 
-    let filteredArray3 = unselected.filter(item => listItem.id !== item.id)
-    unselected = [...filteredArray3];
+    let filteredArray3 = unselectedTasks.filter(item => listItem.id !== item.id)
+    unselectedTasks = [...filteredArray3];
 }
 
 
 const handleCheckbox = function () {
     selectedTasks = [];
-    unselected = [];
+    unselectedTasks = [];
     for (const listItem of allTasks) {
         let checkBox = listItem.querySelector("input[type=checkbox]").checked
 
@@ -165,8 +139,8 @@ const handleCheckbox = function () {
             selectedTasks.push(listItem);
             // console.log(selectedTasks);
         } else {
-            unselected.push(listItem);
-            console.log(unselected.map(a => a.querySelector("label").innerText));
+            unselectedTasks.push(listItem);
+            // console.log(unselectedTasks.map(a => a.querySelector("label").innerText));
         }
     }
     // let listItem = this.parentNode;
@@ -195,11 +169,9 @@ function sortTasks() {
     console.log(selectedValue);
     const copyAllTasks = [...allTasks];
 
-
     // copyAllTasks.map(item => {
     //     console.log(item.querySelector("label").innerText)
     // })
-
 
     if (selectedValue === "A-Z") {
         copyAllTasks.sort((a, b) => {
@@ -219,21 +191,22 @@ function sortTasks() {
 }
 
 function taskAction() {
-    console.log(selectActions.value);
-    if (selectActions.value === "Select All") {
+    let selectedValue = selectActions.value;
+    console.log(selectedValue);
+    if (selectedValue === "Select All") {
         for (const listItem of allTasks) {
             listItem.querySelector("input[type=checkbox]").checked = true;
         }
         selectedTasks = [...allTasks]
-        unselected = []
+        unselectedTasks = []
 
-    } else if (selectActions.value === "Unselect All") {
+    } else if (selectedValue === "Unselect All") {
         for (const listItem of allTasks) {
             listItem.querySelector("input[type=checkbox]").checked = false;
         }
-        unselected = [...allTasks]
+        unselectedTasks = [...allTasks]
         selectedTasks = [];
-    } else if (selectActions.value === "delete selected") {
+    } else if (selectedValue === "delete selected") {
         if (selectedTasks.length > 0) {
             let filtered = allTasks.filter(item => !selectedTasks.includes(item))
             allTasks = [...filtered]
@@ -244,7 +217,7 @@ function taskAction() {
             showTaskList(undefined);
         }
     }
-    selectActions.value = "action"
+    selectedValue = "action"
 }
 
 function handeleEnterKey(e) {
@@ -261,11 +234,16 @@ btnSearch.addEventListener('click', () => {
 })
 
 btnAdd.addEventListener("click", () => {
-    addTask()
+    addTask();
 })
 taskInput.addEventListener('keydown', handeleEnterKey)
 
-
 btnAll.addEventListener("click", showTaskList)
-btnActive.addEventListener("click", showActivatedTasks)
-btnCompleted.addEventListener("click", showSelectedTasks)
+
+btnActive.addEventListener("click", () => {
+    showTaskList(undefined, unselectedTasks)
+})
+
+btnCompleted.addEventListener("click", () => {
+    showTaskList(undefined, selectedTasks)
+})
