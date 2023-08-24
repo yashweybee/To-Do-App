@@ -220,23 +220,42 @@ function taskAction() {
     selectedValue = "action"
 }
 
+
+function handleSearch() {
+    console.log("search");
+    taskInput.removeEventListener('keydown', handeleEnterKey)
+
+    taskInput.addEventListener('keydown', searchItems);
+}
+
+function searchItems(e) {
+    if (e.key === "Enter") {
+        let copyAllTasks = [];
+        let searchInput = taskInput.value;
+        copyAllTasks = allTasks.filter(item => {
+            return item.querySelector('label').innerText.includes(searchInput);
+        })
+        showTaskList(undefined, copyAllTasks);
+        taskInput.value = ""
+    }
+}
+
 function handeleEnterKey(e) {
     if (e.key === "Enter") {
         addTask()
     }
 }
 
-btnSearch.addEventListener('click', () => {
-    console.log("search");
+function handelAdd() {
+    taskInput.removeEventListener('keydown', searchItems);
+    taskInput.focus()
+    taskInput.addEventListener('keydown', handeleEnterKey)
+}
 
-    btnAdd.removeEventListener("click", addTask)
-    taskInput.removeEventListener('keydown', handeleEnterKey)
-})
+btnAdd.addEventListener("click", handelAdd)
 
-btnAdd.addEventListener("click", () => {
-    addTask();
-})
-taskInput.addEventListener('keydown', handeleEnterKey)
+btnSearch.addEventListener('click', handleSearch)
+
 
 btnAll.addEventListener("click", showTaskList)
 
