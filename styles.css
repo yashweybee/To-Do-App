@@ -211,3 +211,12 @@ ul li.editMode label {
     display: flex;
     margin: auto;
 }
+
+.hide {
+    display: none;
+}
+
+.clicked {
+    width: 20px;
+    background-color: #0FC57C;
+}

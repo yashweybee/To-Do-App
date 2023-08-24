@@ -223,6 +223,10 @@ function taskAction() {
 
 function handleSearch() {
     console.log("search");
+
+    btnAdd.style.width = "20px"
+    btnSearch.style.width = "25px"
+
     taskInput.removeEventListener('keydown', handeleEnterKey)
 
     taskInput.addEventListener('keydown', searchItems);
@@ -247,6 +251,10 @@ function handeleEnterKey(e) {
 }
 
 function handelAdd() {
+    taskInput.classList.remove("hide")
+    btnSearch.style.width = "20px"
+    btnAdd.style.width = "25px"
+
     taskInput.removeEventListener('keydown', searchItems);
     taskInput.focus()
     taskInput.addEventListener('keydown', handeleEnterKey)
